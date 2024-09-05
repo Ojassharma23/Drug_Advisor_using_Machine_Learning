@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Drug Advisor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  </head>
+
+  <style>
+
+    body {
+      position: relative;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: url('{{ url_for('static', filename='img2.jpg') }}') no-repeat center center fixed;
+      background-size: cover;
+      filter: blur(6px);
+      z-index: -1;
+    }
+    .disclaimer {
+      font-size: 12px; /* Adjust the font size as needed */
+      text-align: center;
+      margin-top: 1rem; /* Adjust the margin-top as needed */
+      color: white;
+    }
+    .background-image {
+      background-image: url('img2.jpg'); /* Replace 'your-image.jpg' with the path to your image */
+      background-size: cover;
+      background-position: center;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      filter: blur(10px); /* Adjust the blur intensity as needed */
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.5); /* Adjust the opacity of the background */
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 70px auto; /* Adjust the margin to center the container */
+      max-width: 500px;
+       font-size: 16px;/* Adjust the max-width of the container */
+    }
+
+    .form-control {
+      border-color: white; /* Adjust the border color as needed */
+    }
+
+    .btn-primary {
+      background-color: white; /* Adjust the button background color */
+      color: black; /* Adjust the button text color */
+      border-color: white; /* Adjust the button border color */
+      border-radius: 20px;
+    }
+    .button-container {
+      display: flex; /* Use flexbox to make buttons inline */
+      justify-content: center; /* Center align the buttons horizontally */
+      gap: 10px; /* Add spacing between buttons */
+    }
+
+    .toggle-button {
+      padding: 10px 20px;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 5px;
+      background: linear-gradient(45deg, #4C8DB5, #2E75A1); /* Gradient background */
+      color: white; /* Text color */
+      border: none;
+      cursor: pointer; /* Add pointer cursor for better interactivity */
+      transition: background-color 0.3s, color 0.3s; /* Smooth transition effect */
+    }
+
+    .toggle-button:hover {
+      background: linear-gradient(45deg, #87CEFA, #B0E0E6); /* Gradient background on hover */
+      color: #444; /* Text color on hover */
+    }
+
+
+        .myimg {
+      width: 60px; /* Adjust the width */
+      height: 60px; /* Adjust the height */
+      border: 2px solid black;
+      border-radius: 50%; /* Make the image circular */
+      object-fit: cover; /* Ensure the image covers the entire container */
+      transition: transform 0.3s ease-in-out; /* Smooth transition effect */
+    }
+
+    .myimg:hover {
+      transform: scale(1.1); /* Scale up the image on hover */
+    }
+
+
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <!-- Logo at the top-left corner -->
+            <div class="logo">
+                <img class="myimg" src="{{ url_for('static', filename='img.jpg') }}" alt="">
+            </div>
+
+            <a style="font-family: Arial; font-weight: bold; font-size: 24px; text-decoration: none; color: white;" class="navbar-brand" href="#">Drug Advisor</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/blog">Blog</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+
+
+
+<!-- main form of page -->
+ <div class="background-image"></div>
+  <h1 class="mt-4 my-4 text-center text-white">Disease Diagnostic</h1>
+  <div class="container my-4 mt-4">
+    <form action="/predict" method="post">
+      <div class="form-group">
+        <label for="symptoms">Select Symptoms:</label>
+        <input type="text" class="form-control" id="symptoms" name="symptoms" placeholder="Type symptoms such as itching, sleeping, aching, etc">
+      </div>
+      <br>
+      <!--<button type="button" id="startSpeechRecognition" class="btn btn-primary">
+        Start Speech Recognition
+      </button>
+
+      <br>
+      <!Display the transcribed text here -->
+
+      <div name="mysysms" id="transcription"></div>
+      <br>
+      <button type="submit" class="btn btn-danger btn-lg" style="width: 100%; padding: 14px; margin-bottom: 5px;">Predict</button>
+        <div class="disclaimer">Disclaimer: This is a Machine Learning model. This may predict incorrectly. Consult a Doctor before.</div>
+    </form>
+  </div>
+
+
+
+
+
+
+
+<!--{% if predicted_disease %}-->
+
+<!-- Results -->
+<h1 class="text-center my-4 mt-4 >Results</h1>
+<div class="container">
+
+    <div class="result-container">
+        <!-- Buttons to toggle display -->
+        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#diseaseModal">Disease</button>
+        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#descriptionModal">Description</button>
+        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#precautionModal">Precaution</button>
+        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#medicationsModal">Medication</button>
+        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#workoutsModal">Workouts</button>
+        <button class="toggle-button" data-bs-toggle="modal" data-bs-target="#dietsModal">Diets</button>
+    </div>
+</div>
+
+<!--{% endif %}-->
+
+<!-- Disease Modal -->
+    <div class="modal fade" id="diseaseModal" tabindex="-1" aria-labelledby="diseaseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #020606; color:white;"> <!-- Set header background color inline -->
+                    <h5 class="modal-title" id="diseaseModalLabel">Predicted Disease</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="background-color: #modal-body-color;"> <!-- Set modal body background color inline -->
+                    <p>{{ predicted_disease }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Description Modal -->
+    <div class="modal fade" id="descriptionModal" tabindex="-1" aria-labelledby="descriptionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #020606; color:white;">
+                    <h5 class="modal-title" id="descriptionModalLabel">Description</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ dis_des }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- Precaution Modal -->
+    <div class="modal fade" id="precautionModal" tabindex="-1" aria-labelledby="precautionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #020606; color:white;">
+                    <h5 class="modal-title" id="precautionModalLabel">Precaution</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        {% for i in my_precautions %}
+                            <li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Medications Modal -->
+    <div class="modal fade" id="medicationsModal" tabindex="-1" aria-labelledby="medicationsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #020606; color:white;">
+                    <h5 class="modal-title" id="medicationsModalLabel">Medications</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        {% for i in medications %}
+                            <li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Workouts Modal -->
+    <div class="modal fade" id="workoutsModal" tabindex="-1" aria-labelledby="workoutsModalLabel" aria-hidden="true">
+        <div class="modal-dialog" >
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #020606; color:white;">
+                    <h5 class="modal-title" id="workoutsModalLabel">Workouts</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        {% for i in workout %}
+                            <li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diets Modal -->
+    <div class="modal fade" id="dietsModal" tabindex="-1" aria-labelledby="dietsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #020606; color:white;">
+                    <h5 class="modal-title" id="dietsModalLabel">Diets</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        {% for i in my_diet %}
+                            <li>{{ i }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+        <script>
+    const startSpeechRecognitionButton = document.getElementById('startSpeechRecognition');
+    const transcriptionDiv = document.getElementById('transcription');
+
+    startSpeechRecognitionButton.addEventListener('click', startSpeechRecognition);
+
+    function startSpeechRecognition() {
+        const recognition = new webkitSpeechRecognition(); // Use webkitSpeechRecognition for compatibility
+
+        recognition.lang = 'en-US'; // Set the language for recognition
+
+        recognition.onresult = function (event) {
+            const result = event.results[0][0].transcript;
+            transcriptionDiv.textContent = result;
+        };
+
+        recognition.onend = function () {
+            console.log('Speech recognition ended.');
+        };
+
+        recognition.start();
+    }
+</script>
+<!-- Footer -->
+
+<footer>
+    <div class="container text-center">
+      <p class="mb-0">Made with <span style="background-color: transparent; color: #e25555;">&#10084;&#65039;</span> by Jatin Baheti</p>
+    </div>
+</footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
